@@ -5,23 +5,31 @@ const REVIEWS = [
     name: 'Алина К.',
     role: 'Бренд-дизайнер',
     text: 'За две недели собрала портфолио из коммерческих кейсов. Клиенты сами спрашивают, как я так ускорилась.',
+    avatar: 'https://loremflickr.com/160/160/portrait,woman',
   },
   {
     name: 'Марк С.',
     role: 'Контент-креатор',
     text: 'Промпт-система курса закрыла хаос. Теперь серия визуалов для Reels выходит за вечер, а не за неделю.',
+    avatar: 'https://loremflickr.com/160/160/portrait,man',
   },
   {
     name: 'Ева Р.',
     role: 'Арт-директор',
     text: 'Наконец понятный пайплайн: скетч → генерация → доводка. Без воды, только рабочие приёмы под брифы.',
+    avatar: 'https://loremflickr.com/160/160/portrait,girl',
   },
 ] as const
 
 export function Reviews() {
   return (
     <section id="reviews" className="safe-px relative py-24 md:py-28">
-      <div className="mx-auto max-w-6xl">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-1/3 h-64 bg-[radial-gradient(ellipse_at_center,rgb(204_255_0_/0.06),transparent_65%)]"
+      />
+
+      <div className="relative mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -50,12 +58,22 @@ export function Reviews() {
                 ease: [0.16, 1, 0.3, 1],
               }}
               whileHover={{ y: -4 }}
-              className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6"
+              className="glass-panel flex h-full flex-col rounded-[24px] p-6"
             >
-              <p className="text-[15px] leading-relaxed text-mist">«{review.text}»</p>
-              <footer className="mt-6">
-                <p className="font-semibold text-ink">{review.name}</p>
-                <p className="mt-0.5 text-sm text-mist">{review.role}</p>
+              <p className="flex-1 text-[15px] leading-relaxed text-mist">«{review.text}»</p>
+              <footer className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+                <img
+                  src={review.avatar}
+                  alt={review.name}
+                  width={44}
+                  height={44}
+                  loading="lazy"
+                  className="h-11 w-11 rounded-full object-cover ring-2 ring-lime/40"
+                />
+                <div>
+                  <p className="font-semibold text-ink">{review.name}</p>
+                  <p className="mt-0.5 text-sm text-mist">{review.role}</p>
+                </div>
               </footer>
             </motion.blockquote>
           ))}

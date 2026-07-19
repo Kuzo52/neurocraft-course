@@ -2,14 +2,15 @@
 
 @source '../components/Hero.tsx';
 @source '../components/Header.tsx';
-@source '../components/BeforeAfter.tsx';
 @source '../components/Program.tsx';
+@source '../components/Outcomes.tsx';
 @source '../components/Pricing.tsx';
 @source '../components/Reviews.tsx';
 @source '../components/Registration.tsx';
 @source '../components/Modal.tsx';
 @source '../components/Footer.tsx';
 @source '../App.tsx';
+
 
 @theme {
   --color-cobalt: #0a0e17;

@@ -1,7 +1,7 @@
-import { BeforeAfter } from './components/BeforeAfter'
 import { Footer } from './components/Footer'
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
+import { Outcomes } from './components/Outcomes'
 import { Pricing } from './components/Pricing'
 import { Program } from './components/Program'
 import { Registration } from './components/Registration'
@@ -13,8 +13,8 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        <BeforeAfter />
         <Program />
+        <Outcomes />
         <Pricing />
         <Reviews />
         <Registration />
