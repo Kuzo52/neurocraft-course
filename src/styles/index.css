@@ -1,0 +1,114 @@
+@import 'tailwindcss';
+
+@source '../components/Hero.tsx';
+@source '../components/Header.tsx';
+@source '../components/BeforeAfter.tsx';
+@source '../components/Program.tsx';
+@source '../components/Pricing.tsx';
+@source '../components/Reviews.tsx';
+@source '../components/Registration.tsx';
+@source '../components/Modal.tsx';
+@source '../components/Footer.tsx';
+@source '../App.tsx';
+
+@theme {
+  --color-cobalt: #0a0e17;
+  --color-cobalt-elevated: #111827;
+  --color-lime: #ccff00;
+  --color-lime-dim: #a8d400;
+  --color-ink: #ffffff;
+  --color-mist: #9aadc4;
+  --color-glass: rgb(10 14 23 / 0.72);
+  --color-line: rgb(255 255 255 / 0.1);
+
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --ease-snappy: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-fluid: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-apple: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --radius-control: 12px;
+  --radius-panel: 24px;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100svh;
+    font-family: var(--font-body);
+    color: var(--color-ink);
+    background-color: var(--color-cobalt);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  #root {
+    min-height: 100svh;
+  }
+
+  ::selection {
+    background: rgb(204 255 0 / 0.28);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 3px;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #ccff00 55%, #9ad400 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glow-lime {
+    box-shadow:
+      0 0 0 1px rgb(204 255 0 / 0.55),
+      0 0 28px rgb(204 255 0 / 0.28),
+      0 12px 40px rgb(0 0 0 / 0.35);
+  }
+
+  .glass-panel {
+    background: var(--color-glass);
+    border: 1px solid var(--color-line);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  .safe-px {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+
+  .safe-pb {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+}
