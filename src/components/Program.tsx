@@ -66,7 +66,7 @@ function AccordionItem({
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition-colors duration-200 hover:bg-white/[0.04] md:px-6"
+        className="flex w-full items-center justify-between gap-4 px-4 py-4 text-left transition-colors duration-200 hover:bg-white/[0.04] md:px-6 md:py-5"
       >
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-lime">
@@ -123,16 +123,16 @@ export function Program() {
   const [openId, setOpenId] = useState<string>(MODULES[0].id)
 
   return (
-    <section id="program" className="safe-px relative py-24 md:py-28">
+    <section id="program" className="safe-px relative py-12 md:py-24 lg:py-28">
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 max-w-2xl"
+          className="mb-6 max-w-2xl md:mb-10"
         >
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-lime">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-lime md:mb-3">
             Программа
           </p>
           <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.75rem)] font-bold tracking-tight text-ink">
@@ -140,7 +140,7 @@ export function Program() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-2.5 md:gap-3">
           {MODULES.map((module) => (
             <AccordionItem
               key={module.id}

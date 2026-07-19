@@ -58,7 +58,7 @@ const OUTCOMES = [
 
 export function Outcomes() {
   return (
-    <section id="outcomes" className="safe-px relative py-24 md:py-28">
+    <section id="outcomes" className="safe-px relative py-12 md:py-24 lg:py-28">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/4 h-56 bg-[radial-gradient(ellipse_at_center,rgb(204_255_0_/0.07),transparent_65%)]"
@@ -70,9 +70,9 @@ export function Outcomes() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 max-w-2xl"
+          className="mb-6 max-w-2xl md:mb-10"
         >
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-lime">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-lime md:mb-3">
             Результат
           </p>
           <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.75rem)] font-bold tracking-tight text-ink">
@@ -80,7 +80,7 @@ export function Outcomes() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
           {OUTCOMES.map((item, index) => (
             <motion.article
               key={item.title}
@@ -93,7 +93,7 @@ export function Outcomes() {
                 ease: [0.16, 1, 0.3, 1],
               }}
               whileHover={{ y: -6, scale: 1.01 }}
-              className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md md:p-7"
+              className="rounded-[24px] border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md md:p-7"
             >
               <div className="mb-5 grid h-11 w-11 place-items-center rounded-[12px] border border-lime/30 bg-lime/10 text-lime">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">

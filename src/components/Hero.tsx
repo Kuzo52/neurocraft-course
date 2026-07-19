@@ -20,7 +20,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative flex min-h-svh items-center justify-center overflow-hidden safe-px pb-20 pt-32"
+      className="relative flex min-h-[78svh] items-center justify-center overflow-hidden safe-px pb-12 pt-24 md:min-h-svh md:pb-20 md:pt-32"
     >
       <div
         aria-hidden="true"
@@ -78,7 +78,7 @@ export function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="show"
-          className="mt-10 flex justify-center"
+          className="mt-8 flex justify-center md:mt-10"
         >
           <motion.button
             type="button"

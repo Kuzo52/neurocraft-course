@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
 import { useCountdown } from '../hooks/useCountdown'
 import { Modal } from './Modal'
+import { PLANS, type PlanId } from './Pricing'
 
 type FormState = {
   name: string
@@ -45,12 +46,21 @@ function validate(values: FormState): FormErrors {
   return errors
 }
 
-export function Registration() {
+type RegistrationProps = {
+  selectedPlanId: PlanId | null
+}
+
+export function Registration({ selectedPlanId }: RegistrationProps) {
   const countdown = useCountdown(1000 * 60 * 60 * 14 + 1000 * 60 * 37 + 1000 * 22)
   const [values, setValues] = useState<FormState>(INITIAL)
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({})
   const [modalOpen, setModalOpen] = useState(false)
+
+  const selectedPlan = useMemo(
+    () => PLANS.find((plan) => plan.id === selectedPlanId) ?? null,
+    [selectedPlanId],
+  )
 
   const telegramDisplay = useMemo(() => {
     const raw = values.telegram.replace(/^@+/, '')
@@ -86,19 +96,19 @@ export function Registration() {
   }
 
   return (
-    <section id="register" className="safe-px relative py-24 md:py-28">
+    <section id="register" className="safe-px relative py-12 md:py-24 lg:py-28">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgb(204_255_0_/0.1),transparent_55%)]"
       />
 
-      <div className="relative mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch">
+      <div className="relative mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-stretch lg:gap-10">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="rounded-[24px] border border-white/10 bg-white/[0.03] p-7 md:p-8"
+          className="rounded-[24px] border border-white/10 bg-white/[0.03] p-5 md:p-8"
         >
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-lime">
             Регистрация
@@ -107,7 +117,7 @@ export function Registration() {
             Скидка заканчивается через
           </h2>
 
-          <div className="mt-8 grid grid-cols-3 gap-3">
+          <div className="mt-6 grid grid-cols-3 gap-2.5 md:mt-8 md:gap-3">
             {[
               { label: 'Часы', value: countdown.hours },
               { label: 'Минуты', value: countdown.minutes },
@@ -115,7 +125,7 @@ export function Registration() {
             ].map((unit) => (
               <div
                 key={unit.label}
-                className="rounded-[16px] border border-lime/25 bg-cobalt/70 px-3 py-4 text-center"
+                className="rounded-[16px] border border-lime/25 bg-cobalt/70 px-2 py-3.5 text-center md:px-3 md:py-4"
               >
                 <p className="font-display text-3xl font-bold tabular-nums text-lime md:text-4xl">
                   {unit.value}
@@ -125,8 +135,10 @@ export function Registration() {
             ))}
           </div>
 
-          <p className="mt-6 text-[15px] leading-relaxed text-mist">
-            Оставьте заявку — менеджер уточнит тариф и&nbsp;поможет выбрать удобный формат оплаты.
+          <p className="mt-5 text-[15px] leading-relaxed text-mist md:mt-6">
+            {selectedPlan
+              ? <>Вы выбрали тариф «{selectedPlan.name}». Оставьте заявку — менеджер свяжется для уточнения деталей.</>
+              : <>Оставьте заявку — менеджер уточнит тариф и&nbsp;поможет выбрать удобный формат оплаты.</>}
           </p>
         </motion.div>
 
@@ -137,10 +149,17 @@ export function Registration() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-          className="glass-panel rounded-[24px] p-7 md:p-8"
+          className="glass-panel rounded-[24px] p-5 md:p-8"
         >
           <h3 className="font-display text-xl font-semibold text-ink">Форма заявки</h3>
-          <p className="mt-2 text-sm text-mist">Все поля обязательны для заполнения</p>
+          <p className="mt-2 text-sm text-mist">
+            {selectedPlan
+              ? <>Тариф: <span className="font-semibold text-lime">{selectedPlan.name}</span></>
+              : 'Все поля обязательны для заполнения'}
+          </p>
+          {selectedPlan ? (
+            <input type="hidden" name="plan" value={selectedPlan.id} />
+          ) : null}
 
           <div className="mt-7 grid gap-5">
             <label className="grid gap-2">

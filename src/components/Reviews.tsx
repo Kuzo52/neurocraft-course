@@ -23,7 +23,7 @@ const REVIEWS = [
 
 export function Reviews() {
   return (
-    <section id="reviews" className="safe-px relative py-24 md:py-28">
+    <section id="reviews" className="safe-px relative py-12 md:py-24 lg:py-28">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/3 h-64 bg-[radial-gradient(ellipse_at_center,rgb(204_255_0_/0.06),transparent_65%)]"
@@ -35,9 +35,9 @@ export function Reviews() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 max-w-2xl"
+          className="mb-6 max-w-2xl md:mb-10"
         >
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-lime">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-lime md:mb-3">
             Отзывы
           </p>
           <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.75rem)] font-bold tracking-tight text-ink">

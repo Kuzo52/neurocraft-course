@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAnimatedNumber } from '../hooks/useAnimatedNumber'
 import { useSmoothScroll } from '../hooks/useSmoothScroll'
 
+export type PlanId = 'start' | 'pro' | 'vip'
+
 type Plan = {
-  id: string
+  id: PlanId
   name: string
   full: number
   installment: number
@@ -13,7 +15,7 @@ type Plan = {
   featured?: boolean
 }
 
-const PLANS: Plan[] = [
+export const PLANS: Plan[] = [
   {
     id: 'start',
     name: 'Старт',
@@ -48,22 +50,35 @@ function formatRub(value: number): string {
 function PriceCard({
   plan,
   mode,
+  selected,
+  onSelect,
 }: {
   plan: Plan
   mode: 'full' | 'installment'
+  selected: boolean
+  onSelect: (id: PlanId) => void
 }) {
-  const scrollTo = useSmoothScroll()
   const target = mode === 'full' ? plan.full : plan.installment
   const animated = useAnimatedNumber(target)
+  const highlighted = selected || Boolean(plan.featured)
 
   return (
     <motion.article
       whileHover={{ y: -6 }}
       transition={{ type: 'spring', stiffness: 320, damping: 22 }}
-      className={`relative flex h-full flex-col rounded-[24px] p-6 md:p-7 ${
-        plan.featured
-          ? 'glow-lime bg-cobalt-elevated'
-          : 'border border-white/10 bg-white/[0.03]'
+      animate={{
+        boxShadow: selected
+          ? '0 0 0 1px rgb(204 255 0 / 0.7), 0 0 32px rgb(204 255 0 / 0.35), 0 12px 40px rgb(0 0 0 / 0.35)'
+          : plan.featured
+            ? '0 0 0 1px rgb(204 255 0 / 0.55), 0 0 28px rgb(204 255 0 / 0.28), 0 12px 40px rgb(0 0 0 / 0.35)'
+            : '0 0 0 1px rgb(255 255 255 / 0.1)',
+      }}
+      className={`relative flex h-full flex-col rounded-[24px] border p-5 transition-[border-color,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:p-7 ${
+        selected
+          ? 'border-lime bg-cobalt-elevated'
+          : plan.featured
+            ? 'border-lime/55 bg-cobalt-elevated'
+            : 'border-white/10 bg-white/[0.03]'
       }`}
     >
       {plan.featured ? (
@@ -75,7 +90,7 @@ function PriceCard({
       <h3 className="font-display text-2xl font-semibold text-ink">{plan.name}</h3>
       <p className="mt-2 text-sm leading-relaxed text-mist">{plan.description}</p>
 
-      <div className="mt-6">
+      <div className="mt-5 md:mt-6">
         <p className="font-display text-4xl font-bold tracking-tight text-ink">
           {formatRub(animated)}&nbsp;₽
         </p>
@@ -84,7 +99,7 @@ function PriceCard({
         </p>
       </div>
 
-      <ul className="mt-6 flex-1 space-y-3 text-[15px] text-mist">
+      <ul className="mt-5 flex-1 space-y-3 text-[15px] text-mist md:mt-6">
         {plan.features.map((feature) => (
           <li key={feature} className="flex gap-3">
             <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-lime" />
@@ -96,24 +111,61 @@ function PriceCard({
       <motion.button
         type="button"
         whileTap={{ scale: 0.97 }}
-        onClick={() => scrollTo('register')}
-        className={`mt-8 rounded-[12px] px-5 py-3.5 text-[15px] font-semibold transition-transform duration-200 ${
-          plan.featured
-            ? 'bg-lime text-cobalt'
+        onClick={() => onSelect(plan.id)}
+        aria-pressed={selected}
+        className={`mt-6 rounded-[12px] px-5 py-3.5 text-[15px] font-semibold transition-[background-color,color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] md:mt-8 ${
+          selected || highlighted
+            ? 'bg-lime text-cobalt shadow-[0_0_24px_rgb(204_255_0_/0.28)]'
             : 'border border-white/15 bg-white/5 text-ink hover:bg-white/10'
         }`}
       >
-        Выбрать тариф
+        <motion.span
+          key={selected ? 'selected' : 'idle'}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-block"
+        >
+          {selected ? 'Выбрано ✓' : 'Выбрать тариф'}
+        </motion.span>
       </motion.button>
     </motion.article>
   )
 }
 
-export function Pricing() {
+type PricingProps = {
+  selectedPlanId: PlanId | null
+  onSelectPlan: (id: PlanId) => void
+}
+
+export function Pricing({ selectedPlanId, onSelectPlan }: PricingProps) {
   const [mode, setMode] = useState<'full' | 'installment'>('full')
+  const scrollTo = useSmoothScroll()
+  const scrollTimer = useRef<number | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimer.current !== null) {
+        window.clearTimeout(scrollTimer.current)
+      }
+    }
+  }, [])
+
+  const handleSelect = (id: PlanId) => {
+    onSelectPlan(id)
+
+    if (scrollTimer.current !== null) {
+      window.clearTimeout(scrollTimer.current)
+    }
+
+    scrollTimer.current = window.setTimeout(() => {
+      scrollTo('register')
+      scrollTimer.current = null
+    }, 700)
+  }
 
   return (
-    <section id="pricing" className="safe-px relative py-24 md:py-28">
+    <section id="pricing" className="safe-px relative py-12 md:py-24 lg:py-28">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/3 h-64 bg-[radial-gradient(ellipse_at_center,rgb(204_255_0_/0.08),transparent_65%)]"
@@ -125,10 +177,10 @@ export function Pricing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.35 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+          className="mb-6 flex flex-col gap-4 md:mb-10 md:flex-row md:items-end md:justify-between md:gap-6"
         >
           <div className="max-w-xl">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-lime">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.18em] text-lime md:mb-3">
               Тарифы
             </p>
             <h2 className="font-display text-[clamp(1.8rem,3.5vw,2.75rem)] font-bold tracking-tight text-ink">
@@ -171,9 +223,15 @@ export function Pricing() {
           </div>
         </motion.div>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3 md:gap-5">
           {PLANS.map((plan) => (
-            <PriceCard key={plan.id} plan={plan} mode={mode} />
+            <PriceCard
+              key={plan.id}
+              plan={plan}
+              mode={mode}
+              selected={selectedPlanId === plan.id}
+              onSelect={handleSelect}
+            />
           ))}
         </div>
       </div>
